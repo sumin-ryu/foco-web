@@ -1,5 +1,58 @@
 (function () {
-  // —— Intro: AE FOCO_INTRO_LOADING rendered mp4 ——
+  // —— Intro: recreate gauge-hd fill (CSS), not AE video ——
+  // Segments: olive 0–38%, rest 38–46%, blue 46%→; active tip = color→#fff + glow
+  var SEG_A = 0.38;
+  var SEG_B0 = 0.46;
+  var LOAD_MS = 3200;
+  var HOLD_MS = 280;
+
+  function easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  function clearActive(el) {
+    if (!el) return;
+    el.classList.remove("is-active");
+  }
+
+  function setFill(el, left, width, active) {
+    if (!el) return;
+    el.style.left = left * 100 + "%";
+    el.style.width = Math.max(0, width) * 100 + "%";
+    if (active && width > 0.0005) el.classList.add("is-active");
+    else el.classList.remove("is-active");
+  }
+
+  function setGauge(frac) {
+    var f = Math.max(0, Math.min(1, frac));
+    var olive = document.getElementById("fillOlive");
+    var rest = document.getElementById("fillRest");
+    var blue = document.getElementById("fillBlue");
+    var bar = document.getElementById("introBar");
+    var pct = document.getElementById("introPercent");
+
+    clearActive(olive);
+    clearActive(rest);
+    clearActive(blue);
+
+    if (f <= SEG_A) {
+      setFill(olive, 0, f, true);
+      setFill(rest, SEG_A, 0, false);
+      setFill(blue, SEG_B0, 0, false);
+    } else if (f <= SEG_B0) {
+      setFill(olive, 0, SEG_A, false);
+      setFill(rest, SEG_A, f - SEG_A, true);
+      setFill(blue, SEG_B0, 0, false);
+    } else {
+      setFill(olive, 0, SEG_A, false);
+      setFill(rest, SEG_A, SEG_B0 - SEG_A, false);
+      setFill(blue, SEG_B0, f - SEG_B0, true);
+    }
+
+    if (bar) bar.setAttribute("aria-valuenow", String(Math.round(f * 100)));
+    if (pct) pct.textContent = Math.round(f * 100) + "%";
+  }
+
   function finishIntro() {
     var intro = document.getElementById("intro");
     if (intro) intro.classList.add("is-done");
@@ -10,8 +63,7 @@
   }
 
   function runIntro() {
-    var video = document.getElementById("introVideo");
-    if (!video) {
+    if (!document.getElementById("introBar")) {
       finishIntro();
       return;
     }
@@ -22,28 +74,21 @@
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      finishIntro();
+      setGauge(1);
+      window.setTimeout(finishIntro, 700);
       return;
     }
 
-    var done = false;
-    function endOnce() {
-      if (done) return;
-      done = true;
-      finishIntro();
+    setGauge(0);
+    var t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / LOAD_MS);
+      setGauge(easeInOut(p));
+      if (p < 1) window.requestAnimationFrame(frame);
+      else window.setTimeout(finishIntro, HOLD_MS);
     }
-
-    video.addEventListener("ended", endOnce);
-    video.addEventListener("error", endOnce);
-    // safety if play stalls
-    window.setTimeout(endOnce, 6000);
-
-    var playPromise = video.play();
-    if (playPromise && typeof playPromise.then === "function") {
-      playPromise.catch(function () {
-        endOnce();
-      });
-    }
+    window.requestAnimationFrame(frame);
   }
 
   runIntro();
