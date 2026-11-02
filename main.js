@@ -2,11 +2,25 @@
   // —— Intro: FOCO 1H timer bar as loading gauge ——
   // Matches AE plate: olive cap → steel blue → white tip + glow
   var OLIVE_CAP = 0.36;
-  var TIP_RATIO = 0.06;
-  var LOAD_MS = 2200;
+  var TIP_RATIO = 0.07;
+  var LOAD_MS = 3400;
+  var HOLD_MS = 320;
 
-  function easeOutCubic(t) {
-    return 1 - Math.pow(1 - t, 3);
+  // Ease that keeps mid-fill readable (not front-loaded like easeOutCubic)
+  function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  function pad2(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function formatTime(frac) {
+    // 1H bar metaphor: 00:00 → 60:00 as fill completes
+    var totalSec = Math.round(frac * 60 * 60);
+    var m = Math.floor(totalSec / 60);
+    var s = totalSec % 60;
+    return pad2(m) + ":" + pad2(s);
   }
 
   function setBarFill(frac) {
@@ -15,6 +29,7 @@
     var blueEl = document.getElementById("introBlue");
     var tipEl = document.getElementById("introTip");
     var glowEl = document.getElementById("introTipGlow");
+    var timeEl = document.getElementById("introTime");
     if (!bar || !oliveEl || !blueEl || !tipEl || !glowEl) return;
 
     var f = Math.max(0, Math.min(1, frac));
@@ -26,10 +41,11 @@
     blueEl.style.left = olive * 100 + "%";
     blueEl.style.width = blue * 100 + "%";
     tipEl.style.left = (olive + blue) * 100 + "%";
-    tipEl.style.width = Math.max(f > 0 ? 0.8 : 0, tip * 100) + "%";
+    tipEl.style.width = Math.max(f > 0 ? 1.2 : 0, tip * 100) + "%";
     glowEl.style.left = (olive + blue) * 100 + "%";
-    glowEl.style.width = Math.max(f > 0 ? 1.2 : 0, tip * 100 + 1.5) + "%";
+    glowEl.style.width = Math.max(f > 0 ? 2.2 : 0, tip * 100 + 2.5) + "%";
     bar.setAttribute("aria-valuenow", String(Math.round(f * 100)));
+    if (timeEl) timeEl.textContent = formatTime(f);
   }
 
   function finishIntro() {
@@ -38,16 +54,25 @@
     document.body.classList.remove("is-loading");
     window.setTimeout(function () {
       if (intro && intro.parentNode) intro.parentNode.removeChild(intro);
-    }, 600);
+    }, 700);
   }
 
   function runIntro() {
+    // Always show intro on every fresh load (no session skip).
+    // Reduced-motion: still show a brief full-bar hold so branding is visible.
     var reduce =
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !document.getElementById("introBar")) {
-      setBarFill(1);
+    if (!document.getElementById("introBar")) {
       finishIntro();
+      return;
+    }
+
+    document.body.classList.add("is-loading");
+
+    if (reduce) {
+      setBarFill(1);
+      window.setTimeout(finishIntro, 900);
       return;
     }
 
@@ -56,11 +81,11 @@
     function frame(now) {
       if (t0 === null) t0 = now;
       var p = Math.min(1, (now - t0) / LOAD_MS);
-      setBarFill(easeOutCubic(p));
+      setBarFill(easeInOutQuad(p));
       if (p < 1) {
         window.requestAnimationFrame(frame);
       } else {
-        window.setTimeout(finishIntro, 180);
+        window.setTimeout(finishIntro, HOLD_MS);
       }
     }
     window.requestAnimationFrame(frame);
