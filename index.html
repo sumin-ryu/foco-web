@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FOCO — Focus Motif</title>
+  <meta name="description" content="FOCO — 집중을 위한 모티프와 모션 포스터." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="FOCO home">
+      <img src="assets/wordmark.svg" alt="FOCO" width="96" height="28" />
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#system">System</a>
+      <a href="#motion">Motion</a>
+      <a href="#product">Product</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-motif" aria-hidden="true">
+        <svg class="motif-live" viewBox="0 0 200 200" fill="none">
+          <g class="spokes" stroke="currentColor" stroke-width="3.2" stroke-linecap="round">
+            <line x1="100" y1="100" x2="100" y2="28" />
+            <line x1="100" y1="100" x2="151" y2="49" />
+            <line x1="100" y1="100" x2="172" y2="100" />
+            <line x1="100" y1="100" x2="151" y2="151" />
+            <line x1="100" y1="100" x2="100" y2="172" />
+            <line x1="100" y1="100" x2="49" y2="151" />
+            <line x1="100" y1="100" x2="28" y2="100" />
+            <line x1="100" y1="100" x2="49" y2="49" />
+          </g>
+          <circle class="hub" cx="100" cy="100" r="4.5" fill="currentColor" />
+        </svg>
+      </div>
+      <div class="hero-copy">
+        <p class="brand-mark">FOCO</p>
+        <h1>집중의 형태를<br />눈에 보이게.</h1>
+        <p class="lede">1시간부터 8시간까지, 초점이 모이고 펼쳐지는 모티프 시스템.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#motion">모션 보기</a>
+          <a class="btn ghost" href="#system">시스템 살펴보기</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="system" class="section system">
+      <div class="section-head">
+        <p class="eyebrow">Motif System</p>
+        <h2>시간은 막대에서 꽃으로.</h2>
+        <p class="support">막대 하나(1H)가 모여 2H · 4H · 6H · 8H 포커스 모티프가 됩니다.</p>
+      </div>
+      <div class="motif-row" role="list">
+        <article class="motif-item" role="listitem" data-id="1H">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><line x1="60" y1="18" x2="60" y2="102" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+          <span>1H</span>
+        </article>
+        <article class="motif-item" role="listitem" data-id="2H">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <line x1="60" y1="18" x2="60" y2="102" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <line x1="18" y1="60" x2="102" y2="60" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span>2H</span>
+        </article>
+        <article class="motif-item" role="listitem" data-id="4H">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <line x1="60" y1="18" x2="60" y2="102" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <line x1="18" y1="60" x2="102" y2="60" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <line x1="30" y1="30" x2="90" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <line x1="90" y1="30" x2="30" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span>4H</span>
+        </article>
+        <article class="motif-item" role="listitem" data-id="6H">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <g stroke="currentColor" stroke-width="5" stroke-linecap="round" transform="translate(60 60)">
+              <line x1="0" y1="-42" x2="0" y2="42"/>
+              <line x1="-36.4" y1="-21" x2="36.4" y2="21"/>
+              <line x1="-36.4" y1="21" x2="36.4" y2="-21"/>
+            </g>
+          </svg>
+          <span>6H</span>
+        </article>
+        <article class="motif-item" role="listitem" data-id="8H">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <g stroke="currentColor" stroke-width="5" stroke-linecap="round" transform="translate(60 60)">
+              <line x1="0" y1="-42" x2="0" y2="42"/>
+              <line x1="-42" y1="0" x2="42" y2="0"/>
+              <line x1="-29.7" y1="-29.7" x2="29.7" y2="29.7"/>
+              <line x1="29.7" y1="-29.7" x2="-29.7" y2="29.7"/>
+            </g>
+            <circle cx="60" cy="60" r="3.5" fill="currentColor"/>
+          </svg>
+          <span>8H</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="motion" class="section motion">
+      <div class="section-head">
+        <p class="eyebrow">Motion Poster</p>
+        <h2>점이 막대가 되고,<br />다시 선택으로.</h2>
+        <p class="support">가로 모션 포스터 시퀀스 — 중심에서 피어나고, 라인업으로 펼쳐진 뒤 하나씩 호버됩니다.</p>
+      </div>
+      <ol class="story">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <h3>Point</h3>
+            <p>화면 중앙의 작은 점에서 시작합니다.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <h3>Radial grow</h3>
+            <p>1 → 2 → 4 → 8 막대가 방사형으로 자랍니다.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <h3>Rewind &amp; bloom</h3>
+            <p>겹치며 되감긴 뒤, 8H만 중앙에서 피어납니다.</p>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div>
+            <h3>Lineup &amp; select</h3>
+            <p>1H–8H가 펼쳐지고, 왼쪽부터 선택 힌트가 이어집니다.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="stage-frame" aria-label="Motion poster stage">
+        <div class="stage-inner">
+          <div class="stage-lineup" id="stageLineup" aria-hidden="true"></div>
+          <p class="stage-caption">1920 × 1080 · FOCO_MOTION_POSTER</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="product" class="section product">
+      <div class="section-head">
+        <p class="eyebrow">In product</p>
+        <h2>타이머 위에 앉는 언어.</h2>
+        <p class="support">같은 모티프가 포커스 타이머 UI에서도 시간과 상태를 읽게 합니다.</p>
+      </div>
+      <div class="product-visual">
+        <img src="assets/focus-active-rest.png" alt="FOCO focus timer — active and rest states" width="960" height="540" />
+      </div>
+    </section>
+
+    <section class="section close" id="close">
+      <img class="close-mark" src="assets/wordmark.svg" alt="FOCO" width="180" height="52" />
+      <p>집중을 위한 형태. 모션으로 이어집니다.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© FOCO</span>
+    <a href="https://github.com" id="repoLink" rel="noopener">GitHub</a>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
