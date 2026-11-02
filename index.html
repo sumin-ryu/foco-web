@@ -12,7 +12,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="is-loading">
+  <div id="intro" class="intro" role="status" aria-live="polite" aria-label="Loading">
+    <div class="intro-inner">
+      <p class="intro-label">1H BAR</p>
+      <div
+        class="foco-bar"
+        id="introBar"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
+        <div class="foco-bar-track"></div>
+        <div class="foco-bar-olive" id="introOlive"></div>
+        <div class="foco-bar-blue" id="introBlue"></div>
+        <div class="foco-bar-tip-glow" id="introTipGlow"></div>
+        <div class="foco-bar-tip" id="introTip"></div>
+        <div class="foco-bar-ticks" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+      <p class="intro-brand">FOCO</p>
+    </div>
+  </div>
+
   <header class="site-header">
     <a class="brand" href="#top" aria-label="FOCO home">
       <img src="assets/wordmark.svg" alt="FOCO" width="96" height="28" />

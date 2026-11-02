@@ -1,4 +1,73 @@
 (function () {
+  // —— Intro: FOCO 1H timer bar as loading gauge ——
+  // Matches AE plate: olive cap → steel blue → white tip + glow
+  var OLIVE_CAP = 0.36;
+  var TIP_RATIO = 0.06;
+  var LOAD_MS = 2200;
+
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function setBarFill(frac) {
+    var bar = document.getElementById("introBar");
+    var oliveEl = document.getElementById("introOlive");
+    var blueEl = document.getElementById("introBlue");
+    var tipEl = document.getElementById("introTip");
+    var glowEl = document.getElementById("introTipGlow");
+    if (!bar || !oliveEl || !blueEl || !tipEl || !glowEl) return;
+
+    var f = Math.max(0, Math.min(1, frac));
+    var olive = Math.min(OLIVE_CAP, f);
+    var tip = Math.min(TIP_RATIO, Math.max(0, f - olive));
+    var blue = Math.max(0, f - olive - tip);
+
+    oliveEl.style.width = olive * 100 + "%";
+    blueEl.style.left = olive * 100 + "%";
+    blueEl.style.width = blue * 100 + "%";
+    tipEl.style.left = (olive + blue) * 100 + "%";
+    tipEl.style.width = Math.max(f > 0 ? 0.8 : 0, tip * 100) + "%";
+    glowEl.style.left = (olive + blue) * 100 + "%";
+    glowEl.style.width = Math.max(f > 0 ? 1.2 : 0, tip * 100 + 1.5) + "%";
+    bar.setAttribute("aria-valuenow", String(Math.round(f * 100)));
+  }
+
+  function finishIntro() {
+    var intro = document.getElementById("intro");
+    if (intro) intro.classList.add("is-done");
+    document.body.classList.remove("is-loading");
+    window.setTimeout(function () {
+      if (intro && intro.parentNode) intro.parentNode.removeChild(intro);
+    }, 600);
+  }
+
+  function runIntro() {
+    var reduce =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !document.getElementById("introBar")) {
+      setBarFill(1);
+      finishIntro();
+      return;
+    }
+
+    setBarFill(0);
+    var t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / LOAD_MS);
+      setBarFill(easeOutCubic(p));
+      if (p < 1) {
+        window.requestAnimationFrame(frame);
+      } else {
+        window.setTimeout(finishIntro, 180);
+      }
+    }
+    window.requestAnimationFrame(frame);
+  }
+
+  runIntro();
+
   var IDS = ["1H", "2H", "4H", "6H", "8H"];
   var SVGS = {
     "1H":
