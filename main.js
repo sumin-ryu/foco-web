@@ -1,94 +1,49 @@
 (function () {
-  // —— Intro: FOCO 1H timer bar as loading gauge ——
-  // Matches AE plate: olive cap → steel blue → white tip + glow
-  var OLIVE_CAP = 0.36;
-  var TIP_RATIO = 0.07;
-  var LOAD_MS = 3400;
-  var HOLD_MS = 320;
-
-  // Ease that keeps mid-fill readable (not front-loaded like easeOutCubic)
-  function easeInOutQuad(t) {
-    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-  }
-
-  function pad2(n) {
-    return (n < 10 ? "0" : "") + n;
-  }
-
-  function formatTime(frac) {
-    // 1H bar metaphor: 00:00 → 60:00 as fill completes
-    var totalSec = Math.round(frac * 60 * 60);
-    var m = Math.floor(totalSec / 60);
-    var s = totalSec % 60;
-    return pad2(m) + ":" + pad2(s);
-  }
-
-  function setBarFill(frac) {
-    var bar = document.getElementById("introBar");
-    var oliveEl = document.getElementById("introOlive");
-    var blueEl = document.getElementById("introBlue");
-    var tipEl = document.getElementById("introTip");
-    var glowEl = document.getElementById("introTipGlow");
-    var timeEl = document.getElementById("introTime");
-    if (!bar || !oliveEl || !blueEl || !tipEl || !glowEl) return;
-
-    var f = Math.max(0, Math.min(1, frac));
-    var olive = Math.min(OLIVE_CAP, f);
-    var tip = Math.min(TIP_RATIO, Math.max(0, f - olive));
-    var blue = Math.max(0, f - olive - tip);
-
-    oliveEl.style.width = olive * 100 + "%";
-    blueEl.style.left = olive * 100 + "%";
-    blueEl.style.width = blue * 100 + "%";
-    tipEl.style.left = (olive + blue) * 100 + "%";
-    tipEl.style.width = Math.max(f > 0 ? 1.2 : 0, tip * 100) + "%";
-    glowEl.style.left = (olive + blue) * 100 + "%";
-    glowEl.style.width = Math.max(f > 0 ? 2.2 : 0, tip * 100 + 2.5) + "%";
-    bar.setAttribute("aria-valuenow", String(Math.round(f * 100)));
-    if (timeEl) timeEl.textContent = formatTime(f);
-  }
-
+  // —— Intro: AE FOCO_INTRO_LOADING rendered mp4 ——
   function finishIntro() {
     var intro = document.getElementById("intro");
     if (intro) intro.classList.add("is-done");
     document.body.classList.remove("is-loading");
     window.setTimeout(function () {
       if (intro && intro.parentNode) intro.parentNode.removeChild(intro);
-    }, 700);
+    }, 600);
   }
 
   function runIntro() {
-    // Always show intro on every fresh load (no session skip).
-    // Reduced-motion: still show a brief full-bar hold so branding is visible.
-    var reduce =
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!document.getElementById("introBar")) {
+    var video = document.getElementById("introVideo");
+    if (!video) {
       finishIntro();
       return;
     }
 
     document.body.classList.add("is-loading");
 
+    var reduce =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setBarFill(1);
-      window.setTimeout(finishIntro, 900);
+      finishIntro();
       return;
     }
 
-    setBarFill(0);
-    var t0 = null;
-    function frame(now) {
-      if (t0 === null) t0 = now;
-      var p = Math.min(1, (now - t0) / LOAD_MS);
-      setBarFill(easeInOutQuad(p));
-      if (p < 1) {
-        window.requestAnimationFrame(frame);
-      } else {
-        window.setTimeout(finishIntro, HOLD_MS);
-      }
+    var done = false;
+    function endOnce() {
+      if (done) return;
+      done = true;
+      finishIntro();
     }
-    window.requestAnimationFrame(frame);
+
+    video.addEventListener("ended", endOnce);
+    video.addEventListener("error", endOnce);
+    // safety if play stalls
+    window.setTimeout(endOnce, 6000);
+
+    var playPromise = video.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.catch(function () {
+        endOnce();
+      });
+    }
   }
 
   runIntro();

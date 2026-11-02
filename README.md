@@ -24,3 +24,7 @@ npx --yes serve .
 - System — 1H → 8H motif set
 - Motion — poster sequence story + live hover hint
 - Product — focus timer UI
+
+## Web intro (AE source of truth)
+
+Site loading intro should match AE comp **`FOCO_INTRO_LOADING`** (1920×1080, 30fps, ~3.5s; 1H bar fill 0→100%). Rebuild/verify: `scripts/build-foco-intro-loading.jsx`, `scripts/verify-foco-intro-loading.jsx`. Do not treat `FOCO_MAIN_MOTION` / `FOCO_MOTION_POSTER` as the web bumper reference.

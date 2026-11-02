@@ -10,33 +10,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=intro2" />
+  <link rel="stylesheet" href="styles.css?v=intro3" />
 </head>
 <body class="is-loading">
   <div id="intro" class="intro" role="status" aria-live="polite" aria-label="FOCO loading">
-    <div class="intro-inner">
-      <p class="intro-kicker">FOCUS</p>
-      <p class="intro-label">1H BAR</p>
-      <p class="intro-time" id="introTime">00:00</p>
-      <div
-        class="foco-bar"
-        id="introBar"
-        role="progressbar"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow="0"
-      >
-        <div class="foco-bar-track"></div>
-        <div class="foco-bar-olive" id="introOlive"></div>
-        <div class="foco-bar-blue" id="introBlue"></div>
-        <div class="foco-bar-tip-glow" id="introTipGlow"></div>
-        <div class="foco-bar-tip" id="introTip"></div>
-        <div class="foco-bar-ticks" aria-hidden="true">
-          <i></i><i></i><i></i>
-        </div>
-      </div>
-      <p class="intro-brand">FOCO</p>
-    </div>
+    <video
+      id="introVideo"
+      class="intro-video"
+      src="assets/foco-intro.mp4"
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    ></video>
   </div>
 
   <header class="site-header">
